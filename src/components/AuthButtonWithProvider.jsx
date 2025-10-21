@@ -1,6 +1,6 @@
 import React from 'react'
 import { FaChevronRight } from 'react-icons/fa'
-import{GoogleAuthProvider,GithubAuthProvider, signInWithRedirect} from 'firebase/auth'
+import{GoogleAuthProvider,GithubAuthProvider, signInWithRedirect, signInWithPopup} from 'firebase/auth'
 import { auth } from '../config/firebase.config';
 
 const  AuthButtonWithProvider=({Icon,label,provider})=> {
@@ -11,7 +11,7 @@ const  AuthButtonWithProvider=({Icon,label,provider})=> {
         case "GoogleAuthProvider":
             console.log("Inside the Google Auth")
             console.log('haha')
-            await signInWithRedirect(auth,googleAuthProvider).then((result)=>{
+            await signInWithPopup(auth,googleAuthProvider).then((result)=>{
               console.log(result)
             }).catch(err=>{
               console.log(`Error:${err}`)
