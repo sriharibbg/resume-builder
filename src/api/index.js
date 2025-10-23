@@ -5,7 +5,7 @@ export const getUserDetail=()=>{
         const unsubscribe=auth.onAuthStateChanged((userCred)=>{
             if(userCred){
             const userData=userCred.providerData[0];
-            console.log(userData)
+            resolve(userData)
         }else{
             reject(new Error("User is not authenticated"))
         }

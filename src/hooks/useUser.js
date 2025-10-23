@@ -8,6 +8,9 @@ const useUser = () => {
     queryFn: async () => {
       try {
         const userDetail = await getUserDetail();
+        console.log("---====>>>>")
+        console.log(userDetail)
+        console.log(";;;;;;;;;;;;;;;")
         return userDetail;
       } catch (err) {
         if (err instanceof Error && !err.message.includes("not authenticated")) {

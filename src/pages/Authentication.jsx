@@ -6,6 +6,7 @@ import {FaGoogle,FaGithub} from 'react-icons/fa6'
 import { toast } from 'react-toastify'
 import useUser from '../hooks/useUser'
 import { useNavigate } from 'react-router-dom'
+import MainSpinner from '../components/MainSpinner'
 
 function Authentication() {
   const {data, isLoading, isError}=useUser()
@@ -14,7 +15,10 @@ function Authentication() {
     if(!isLoading&& data){
       navigate("/",{replace:true})
     }
-  })
+  },[isLoading,data])
+  if(isLoading){
+    return <MainSpinner/>
+  }
   return (
     <div className='auth-section'>
         {/* top section*/}
