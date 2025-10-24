@@ -8,6 +8,7 @@ import { HiLogout } from 'react-icons/hi'
 import { FadeInOutWithOpacity, slideUpMenu } from '../animations'
 import { auth } from '../config/firebase.config'
 import { QueryClient, useQueryClient } from '@tanstack/react-query'
+import { adminIds } from '../utils/helper'
 
 function Header() {
     const {data,isLoading,isError}=useUser()
@@ -70,7 +71,8 @@ className="absolute px-4 py-3 rounded-md bg-white right-0 top-14 flex flex-col i
     {/**menus */}
     <div className='w-full flex-col items-start flex gap-8 pt-6'>
         <Link className='text-txtLight hover:text-txtDark text-base  whitespace-nowrap' to={'/profile'}>My Account</Link>
-<Link className='text-txtLight hover:text-txtDark  text-base whitespace-nowrap' to={'/template/create'}>Add New Template</Link>
+
+{adminIds.includes(data?.uid)&&<Link className='text-txtLight hover:text-txtDark text-base  whitespace-nowrap' to={'/template/create'}>Add new Templete</Link>}
 <div className='w-full px-2 py-2 border-t border-gray-300 flex items-center justify-between group cursor-pointer' onClick={signOutUser}>
     <p className='group-hover:text-txtDark text-txtLight'>Sign Out</p>
     <HiLogout className='group-hover:text-txtDark text-txtLight'/>
