@@ -8,12 +8,17 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
   import { ToastContainer, toast } from 'react-toastify';
+  
+import { Provider } from 'react-redux';
+import store from '../store/index'
 
 
 
 function App() {
   const queryClient=new QueryClient()
   return (
+    
+  <Provider store={store} >
     <QueryClientProvider client={queryClient}>
     <Suspense fallback={<div>Loading...</div>}>
 <Routes>
@@ -25,6 +30,7 @@ function App() {
    <ToastContainer position='top-right' theme='dark'/>
    <ReactQueryDevtools initialIsOpen={false}></ReactQueryDevtools>
    </QueryClientProvider>
+   </Provider>
   );
 }
 

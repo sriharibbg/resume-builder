@@ -1,13 +1,16 @@
 import { useQuery } from "@tanstack/react-query"
 import { toast } from "react-toastify";
+import apis from "../apis/apis";
 
 const useTemplates=()=>{
     const { data, isLoading, isError, refetch } = useQuery({
        queryKey: ["templates"], // ✅ must be array in v5
        queryFn: async () => {
          try {
-           const templates=null//await getTemplates();
-           return templates;
+           const templates=await apis.post("/get-templates")//await getTemplates();\\\\\\\\\\\\\\
+           console.log(templates.data.templates)
+           console.log(",.,.<><><>")
+           return templates.data.templates;
          } catch (err) {
            if (err instanceof Error && !err.message.includes("not authenticated")) {
              toast.error("Something went wrong....."); // ✅ toast.error instead of toast.err

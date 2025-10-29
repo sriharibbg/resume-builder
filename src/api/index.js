@@ -1,4 +1,6 @@
+import axios from "axios";
 import { auth } from "../config/firebase.config"
+import apis from "../apis/apis";
 
 export const getUserDetail=()=>{
     return new Promise((resolve,reject)=>{
@@ -12,3 +14,4 @@ export const getUserDetail=()=>{
         })
     })
 }
+
