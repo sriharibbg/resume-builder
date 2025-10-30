@@ -29,10 +29,10 @@ export const remove_template = createAsyncThunk(
       const { data } = await apis.delete(`/delete-template?id=${template_id}`);
 
       console.log(data);
-   //   return fulfillWithValue(data);
+      return fulfillWithValue(data);
     } catch (error) {
        console.log(error.response.data)
-  //    return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -70,15 +70,15 @@ const templateReducer = createSlice({
       })
       .addCase(remove_template.pending, (state, { payload }) => {
         state.loader = true;
-      //  state.errorMessage = "";
+        state.errorMessage = "";
       })
       .addCase(remove_template.rejected, (state, { payload }) => {
         state.loader = false;
-      //  state.errorMessage = payload.error;
+        state.errorMessage = payload.error;
       })
       .addCase(remove_template.fulfilled, (state, { payload }) => {
         state.loader = false;
-       // state.successMessage = payload.message;
+        state.successMessage = payload.message;
       })
 
   },

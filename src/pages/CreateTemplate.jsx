@@ -5,11 +5,13 @@ import { FaTrash } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { PuffLoader } from 'react-spinners'
 import { toast } from 'react-toastify'
-import { initialTags } from '../utils/helper'
+import { adminIds, initialTags } from '../utils/helper'
 import useTemplates from '../hooks/useTemplates'
 import { serverTimestamp } from 'firebase/firestore'
 import apis from '../apis/apis'
 import { add_template, messageClear, remove_template } from '../store/reducers/templateReducer';
+import useUser from './../hooks/useUser';
+import { useNavigate } from 'react-router-dom';
 
 function CreateTemplate() {
   const dispatch = useDispatch();
@@ -18,7 +20,10 @@ function CreateTemplate() {
         imageURL:null
     })
     const { data: templates, isError: templatesIsError, isLoading: templatesIsLoading, refetch: templatesRefetch } = useTemplates()
-console.log('......>>>>>')
+const{data:user,isLoading}=useUser()
+
+const navigate=useNavigate()
+    console.log('......>>>>>')
 console.log(templates)
     const [imageAsset,setImageAsset]=useState({
         isImageLoading:false,
@@ -118,6 +123,13 @@ const handleSelectTags=(tag)=>{
     }
   }, [successMessage, errorMessage, dispatch]);
 
+
+
+useEffect(() => {
+  if (!isLoading && !adminIds.includes(user?.uid)) {
+    navigate("/", { replace: true });
+  }
+}, [user, isLoading]);
   return (
     <div className='w-full px-4 lg:px-10 2xl:px-32 py-4 grid grid-cols-1 lg:grid-cols-12'>
         {/**left container */}

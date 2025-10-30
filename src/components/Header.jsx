@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import useUser from '../hooks/useUser'
-import { Link } from 'react-router-dom'
+import { Link, UNSAFE_SingleFetchRedirectSymbol } from 'react-router-dom'
 import { Logo } from '../assets'
 import { AnimatePresence,motion } from 'framer-motion'
+import useFilters from '../hooks/useFilters'
 import { PuffLoader } from 'react-spinners'
 import { HiLogout } from 'react-icons/hi'
 import { FadeInOutWithOpacity, slideUpMenu } from '../animations'
@@ -14,11 +15,30 @@ function Header() {
     const {data,isLoading,isError}=useUser()
     const [isMenu,setIsMenu]=useState(false)
     const queryClient=useQueryClient()
+    const {data:filterData}=useFilters()
     const signOutUser=async()=>{
       await auth.signOut().then(()=>{
         queryClient.setQueriesData("user",null)
       })
 
+    }
+    const handleSearchTerm=(e)=>{
+   //  const previousState = queryClient.getQueryData(["globalFilter"]);
+  //const updatedState = { ...previousState, searchTerm: e.target.value };
+
+  //queryClient.setQueryData(["globalFilter"], updatedState);
+ // console.log(...queryClient.getQueryData(["globalFilter"]))
+ queryClient.setQueryData(["globalFilter"], {
+  ...queryClient.getQueryData(["globalFilter"]),
+  searchTerm: e.target.value,
+});
+    }
+
+    const clearFilter=()=>{
+      queryClient.setQueryData(["globalFilter"], {
+  ...queryClient.getQueryData(["globalFilter"]),
+  searchTerm:"",
+});
     }
   return (
 <header className='w-full flex items-center justify-between px-4 py-3 lg:px-8 border-b border-gray-300 bg-bgPrimary z-50 gap-12 sticky top-0'>
@@ -28,7 +48,18 @@ function Header() {
     </Link>
     {/*  input */ }
     <div className='flex-1 border border-gray-300 px-4 py-1 rounded-md flex items-center justify-between bg-gray-200'>
-        <input type='text' placeholder='search here...' className='flex-1 h-10 bg-transparent text-base font-semibold outline-none border-none'></input>
+      {/*value={filterData.searchTerm? filterData.searchTerm:''*/} 
+        <input value={filterData?.searchTerm? filterData.searchTerm:''} onChange={handleSearchTerm} type='text' placeholder='search here...' className='flex-1 h-10 bg-transparent text-base font-semibold outline-none border-none'></input>
+    <AnimatePresence>
+      {filterData?.searchTerm.length>0 && 
+      (
+        <motion.div 
+        onClick={clearFilter}
+        {...FadeInOutWithOpacity} className='w-8 h-8 flex items-center justify-center 
+      bg-gray-300 rounded-md cursor-pointer active:scale-95 duration-150'>
+        <p className='text-2xl text-black'>x</p>
+      </motion.div>)}
+    </AnimatePresence>
     </div>
     {/*  profile section */ }
     <AnimatePresence>
