@@ -2,13 +2,73 @@ import React, { useState } from 'react'
 import {AnimatePresence, motion} from 'framer-motion'
 import { FadeInOutWithOpacity, scaleInOut } from '../animations'
 import { FiFolderPlus, FiHeart } from "react-icons/fi"
+import { BiSolidFolderPlus } from "react-icons/bi";
+import useUser from '../hooks/useUser'
+import useTemplates from '../hooks/useTemplates';
+import { toast } from 'react-toastify';
+import apis from '../apis/apis';
 function TemplateDesignPin({data,index}) {
-    const addToCollection=async()=>{
+    const {data:user,refetch:userRefetch}=useUser()
+    
+const { refetch: temp_refetch } = useTemplates();
+const addToCollection = async (e) => {
+  e.stopPropagation();
+  console.log('ksjfdksdjf')
 
+  try {
+    if (!user?.uid) {
+      toast.error("User not authenticated");
+      return;
     }
-    const addToFavourites=async()=>{
 
+    if (!data?._id) {
+      toast.error("Invalid template data");
+      return;
     }
+
+    const { data: res } = await apis.post("/saveToCollections", {
+      uid: user.uid,
+      dataId: data._id,
+    });
+
+    toast.success(res.message);
+    userRefetch(); // ✅ refresh user data (collections array)
+  } catch (err) {
+    console.error("Error adding to collection:", err);
+    toast.error(`Error: ${err.response?.data?.message || err.message}`);
+  }
+};
+
+
+
+
+
+
+const saveToFavourites = async (e) => {
+    console.log('clicked')
+  try {
+    if (!user?._id && !user?.uid) {
+      toast.error("User not authenticated");
+      return;
+    }
+
+    const userId = user._id || user.uid; // depending on backend auth
+    const templateId = data._id;
+
+    const { data: res } = await apis.post("/saveToFavourites", {
+      userId,
+      templateId,
+    });
+
+    toast.success(res.message);
+  } catch (err) {
+    console.error(err);
+    toast.error(`Error: ${err.response?.data?.error || err.message}`);
+  }
+};
+
+
+
   return (
     <motion.div  key={data?._id || index}
      {...scaleInOut(index)}
@@ -38,8 +98,10 @@ function TemplateDesignPin({data,index}) {
                 <motion.div {...FadeInOutWithOpacity} className='absolute inset-0 bg-[rgba(0,0,0,0.4)] 
                 flex flex-col items-center justify-start px-4 py-3 z-50 cursor-pointer'>
                     <div className='flex flex-col items-end justify-start w-full gap-8'>
-                        <InnerBoxCard label={'Add to Collection'} Icon={FiFolderPlus} onHandle={addToCollection}/>
-                      <InnerBoxCard label={'Add to Collection'} Icon={FiHeart} onHandle={addToCollection}/>
+                    <InnerBoxCard
+                     label={user?.collections?.includes(data?._id)
+                     ?'Added to collections':'Add to collections'} Icon={user?.collections?.includes(data?._id)? BiSolidFolderPlus : FiFolderPlus} onHandle={addToCollection}/>
+                     <InnerBoxCard label={'Add to Collection'} Icon={FiHeart} onHandle={saveToFavourites}/>
                     
                     </div>
                 </motion.div>
