@@ -6,7 +6,9 @@ export const getUserDetail=()=>{
     return new Promise((resolve,reject)=>{
         const unsubscribe=auth.onAuthStateChanged(async (userCred)=>{
             try{
+                console.log('=====>>>>>>>')
             if(userCred){
+                console.log('====@@=>>>>>>>')
             const userData=userCred.providerData[0];
            
 
@@ -38,4 +40,10 @@ export const getUserDetail=()=>{
         })
     })
 }
-
+export const getTemplateDetails = async (templateId) => {
+  const res = await apis.get(`/get-template/${templateId}`);
+  console.log(">>>>>>>>>>>>>>>>>>>Id")
+  
+  console.log(res)
+  return res.data.template; // ✅ returns template object only
+};
