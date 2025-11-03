@@ -1,11 +1,20 @@
-import React from 'react'
-
-function CreateResume() {
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import { TemplatesData } from "../utils/helper";
+const CreateResume = () => {
   return (
-    <div>
-      CreateResume
+    <div className="w-full flex flex-col items-center justify-start py-4">
+      <Routes>
+        {TemplatesData.map((template) => (
+          <Route
+            key={template?.id}
+            path={`/${template.name}`}          // ❌ ERROR: extra "/" makes route absolute instead of relative
+            Component={template.component}      // ❌ ERROR: should use "element" prop, not "Component"
+          />
+        ))}
+      </Routes>
     </div>
-  )
-}
+  );
+};
 
-export default CreateResume
+export default CreateResume;

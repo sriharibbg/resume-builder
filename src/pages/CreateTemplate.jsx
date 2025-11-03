@@ -142,7 +142,7 @@ useEffect(() => {
                 <p className='text-base text-txtLight uppercase font-semibold'>TempID:{""}</p>
                 
                 <p className='text-sm text-txtDark capitalize font-bold'>{
-                    templates &&templates.length>0?`Templates${templates.length+1}`:"Template1"}</p>
+                    templates &&templates.length>0?`Template${templates.length+1}`:"Template1"}</p>
             </div>
             {/** template title section*/}
             <input className='w-full px-4 py-3 rounded-md bg-transparent border border-gray-300 text-lg text-txtPrimary focus:text-txtDark focus:shadow-md outline-none' type='text' name='title' target='title' placeholder='Template Title' value={formData.title} onChange={handleInputChange}/>
